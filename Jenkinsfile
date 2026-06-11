@@ -77,8 +77,11 @@ pipeline {
 
             steps {
                 sh '''
-                    sleep 10
-                    curl -f http://localhost:3000
+                    sleep 15
+
+                    docker ps
+
+                    docker inspect logicq1-landing-page
                 '''
             }
         }

@@ -7,11 +7,11 @@ services:
     restart: unless-stopped
 
     ports:
-      - "3000:80"
+      - "3005:80"
 
     networks:
-      - app-network
+      - logicq1-network
 
 networks:
-  app-network:
+  logicq1-network:
     external: true

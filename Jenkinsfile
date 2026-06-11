@@ -1,99 +1,101 @@
-tools {
-    nodejs 'node22'
-}
+pipeline {
 
-options {
-    timestamps()
-    disableConcurrentBuilds()
-    buildDiscarder(logRotator(numToKeepStr: '20'))
-    timeout(time: 20, unit: 'MINUTES')
-}
+    agent any
 
-environment {
-    APP_NAME = 'landing-page'
-    NODE_OPTIONS = '--max-old-space-size=2048'
-    DEPLOY_DIR = '/opt/LogicQ1-Landing-Page'
-}
+    tools {
+        nodejs 'node22'
+    }
 
-stages {
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        timeout(time: 20, unit: 'MINUTES')
+    }
 
-    stage('Checkout') {
-        steps {
-            checkout scm
+    environment {
+        APP_NAME = 'landing-page'
+        NODE_OPTIONS = '--max-old-space-size=2048'
+        DEPLOY_DIR = '/opt/LogicQ1-Landing-Page'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Verify Environment') {
+            steps {
+                sh 'node --version'
+                sh 'npm --version'
+                sh 'docker --version'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'master'
+            }
+
+            steps {
+                echo 'Deploying master branch...'
+
+                sh '''
+                    mkdir -p ${DEPLOY_DIR}
+
+                    rsync -av --delete \
+                    --exclude node_modules \
+                    --exclude .git \
+                    ./ ${DEPLOY_DIR}/
+
+                    cd ${DEPLOY_DIR}
+
+                    docker compose up -d --build
+                '''
+            }
+        }
+
+        stage('Health Check') {
+            when {
+                branch 'master'
+            }
+
+            steps {
+                sh '''
+                    sleep 10
+                    curl -f http://localhost:3000
+                '''
+            }
         }
     }
 
-    stage('Verify Environment') {
-        steps {
-            sh 'node --version'
-            sh 'npm --version'
-            sh 'docker --version'
-        }
-    }
+    post {
 
-    stage('Install Dependencies') {
-        steps {
-            sh 'npm ci'
-        }
-    }
-
-    stage('Build') {
-        steps {
-            sh 'npm run build'
-        }
-    }
-
-    stage('Deploy') {
-
-        when {
-            branch 'master'
+        success {
+            echo 'Pipeline completed successfully.'
         }
 
-        steps {
-
-            echo 'Deploying master branch...'
-
-            sh '''
-                mkdir -p ${DEPLOY_DIR}
-
-                rsync -av --delete \
-                --exclude node_modules \
-                --exclude .git \
-                ./ ${DEPLOY_DIR}/
-
-                cd ${DEPLOY_DIR}
-
-                docker compose up -d --build
-            '''
-        }
-    }
-
-    stage('Health Check') {
-
-        when {
-            branch 'master'
+        failure {
+            echo 'Pipeline failed.'
         }
 
-        steps {
-            sh '''
-                sleep 10
-                curl -f http://localhost:3000
-            '''
+        always {
+            cleanWs()
         }
-    }
-}
-
-post {
-
-    success {
-        echo 'Pipeline completed successfully.'
-    }
-
-    failure {
-        echo 'Pipeline failed.'
-    }
-
-    always {
-        cleanWs()
     }
 }

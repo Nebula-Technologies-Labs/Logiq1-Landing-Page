@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
 
     ports:
-      - "127.0.0.1:3212:3212"
+      - "127.0.0.1:3212:3000"
 
     networks:
       - logicq1-network

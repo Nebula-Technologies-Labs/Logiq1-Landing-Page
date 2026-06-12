@@ -1,13 +1,13 @@
 services:
   landing-page:
-    container_name: logicq1-landing-page
+    container_name: landing-page
 
     build: .
 
     restart: unless-stopped
 
     ports:
-      - "3005:80"
+      - "3212"
 
     networks:
       - logicq1-network

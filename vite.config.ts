@@ -1,12 +1,4 @@
 import { defineConfig } from 'vite'
-<<<<<<< HEAD
-import tailwindcss from '@tailwindcss/vite'
-export default defineConfig({
-  plugins: [
-    tailwindcss(),
-  ],
-})
-=======
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
@@ -19,4 +11,3 @@ export default defineConfig({
     babel({ presets: [reactCompilerPreset()] })
   ],
 })
->>>>>>> upstream/feature/NewLanding

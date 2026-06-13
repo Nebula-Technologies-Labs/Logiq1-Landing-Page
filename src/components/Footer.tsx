@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-const Footer = () => {
-  return (
-    <div>Footer</div>
-  )
-}
-
-export default Footer
-=======
 import logo from '../assets/logo.png'
 import { crmUrl } from '../utils/crm'
 
@@ -65,4 +56,3 @@ export default function Footer() {
     </footer>
   )
 }
->>>>>>> upstream/feature/NewLanding

@@ -1,12 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-<<<<<<< HEAD
-    --color-black: #000000;
-    --color-white: #ffffff;
-    --color-background: #FCFAF6;
-}
-=======
   --color-brand-50: #f3f0ff;
   --color-brand-100: #e9e0ff;
   --color-brand-200: #d4c0ff;
@@ -51,4 +45,3 @@ h1, h2, h3, h4, h5, h6 {
     scroll-behavior: auto !important;
   }
 }
->>>>>>> upstream/feature/NewLanding

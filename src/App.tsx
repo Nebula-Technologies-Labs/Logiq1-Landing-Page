@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Header from "./components/Header";
@@ -22,3 +23,26 @@ const App = () => {
 };
 
 export default App;
+=======
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import Features from './components/Features'
+import CTASection from './components/CTASection'
+import Footer from './components/Footer'
+
+function App() {
+  return (
+    <>
+      <Navbar />
+      <main>
+        <Hero />
+        <Features />
+        <CTASection />
+      </main>
+      <Footer />
+    </>
+  )
+}
+
+export default App
+>>>>>>> upstream/feature/NewLanding

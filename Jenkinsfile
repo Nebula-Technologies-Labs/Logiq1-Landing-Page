@@ -77,11 +77,15 @@ pipeline {
 
             steps {
                 sh '''
-                    sleep 15
+                    echo "Waiting for application startup..."
+                    sleep 20
 
-                    docker ps
+                    echo "Checking https://logiq1.com"
 
-                    docker inspect logicq1-landing-page
+                    curl --fail --silent --show-error \
+                        https://logiq1.com > /dev/null
+
+                    echo "Health check passed."
                 '''
             }
         }
